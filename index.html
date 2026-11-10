@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Dokumenty</title>
+
+  <!-- PWA & Konfiguracja ekranu głównego (iOS i Android) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dokumenty">
+  <meta name="application-name" content="Dokumenty">
+  <meta name="theme-color" content="#2563eb">
+
+  <!-- Odwołanie do ikony aplikacji -->
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #f1f5f9;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe id="appFrame" allow="camera; microphone; geolocation"></iframe>
+
+  <script>
+    // Tutaj wklej swój link do wdrożenia z Apps Script kończący się na /exec
+    const GOOGLE_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbyRnYLzN-7sLcPAC_x7RC5aYf_dkgZfniUbEKrbA9wROkV1rIq2xjWt5UUVhtk-JWU/exec";
+
+    // Przekazanie parametru ?k=K-XXXXXX do ramki Google
+    const currentParams = window.location.search;
+    document.getElementById('appFrame').src = GOOGLE_SCRIPT_EXEC_URL + currentParams;
+  </script>
+
+</body>
+</html>
