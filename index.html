@@ -40,21 +40,35 @@
   <script>
     const GOOGLE_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbyRnYLzN-7sLcPAC_x7RC5aYf_dkgZfniUbEKrbA9wROkV1rIq2xjWt5UUVhtk-JWU/exec";
 
-    // 1. Pobierz lub wygeneruj stałe ID urządzenia w pamięci głównej domeny (GitHub)
+    // 1. Stałe ID urządzenia
     let deviceId = localStorage.getItem('docflow_device_id');
     if (!deviceId) {
       deviceId = 'DEV-' + Math.random().toString(36).substring(2, 10).toUpperCase();
       localStorage.setItem('docflow_device_id', deviceId);
     }
 
-    // 2. Zbierz parametry z adresu URL (np. ?k=K-123456) i doklej stałe devId
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('devId', deviceId);
+    // 2. Odczyt lub zapamiętanie kodu koordynatora (?k=...)
+    const currentParams = new URLSearchParams(window.location.search);
+    let coordCode = currentParams.get('k');
 
-    // 3. Załaduj ramkę z kompletem parametrów
+    if (coordCode) {
+      // Jeśli pracownik wszedł z linku z ?k=..., zapisz kod na stałe w pamięci telefonu
+      localStorage.setItem('docflow_coord_code', coordCode.trim());
+    } else {
+      // Jeśli otworzył z ikony na ekranie głównym (gdzie URL nie ma ?k=), pobierz zapisany kod
+      coordCode = localStorage.getItem('docflow_coord_code') || '';
+    }
+
+    // 3. Zbuduj pełny adres dla ramki Google Apps Script
+    const frameParams = new URLSearchParams();
+    frameParams.set('devId', deviceId);
+    if (coordCode) {
+      frameParams.set('k', coordCode);
+    }
+
     const frame = document.getElementById('appFrame');
     const separator = GOOGLE_SCRIPT_EXEC_URL.includes('?') ? '&' : '?';
-    frame.src = GOOGLE_SCRIPT_EXEC_URL + separator + urlParams.toString();
+    frame.src = GOOGLE_SCRIPT_EXEC_URL + separator + frameParams.toString();
   </script>
 
 </body>
