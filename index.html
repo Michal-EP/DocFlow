@@ -35,16 +35,26 @@
   </style>
 </head>
 <body>
-
   <iframe id="appFrame" allow="camera; microphone; geolocation"></iframe>
 
   <script>
-    // Tutaj wklej swój link do wdrożenia z Apps Script kończący się na /exec
+    // Twój stały link do wdrożenia z Google Apps Script:
     const GOOGLE_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbyRnYLzN-7sLcPAC_x7RC5aYf_dkgZfniUbEKrbA9wROkV1rIq2xjWt5UUVhtk-JWU/exec";
 
-    // Przekazanie parametru ?k=K-XXXXXX do ramki Google
-    const currentParams = window.location.search;
-    document.getElementById('appFrame').src = GOOGLE_SCRIPT_EXEC_URL + currentParams;
+    // Odczytanie parametrów z paska adresu GitHuba (np. ?k=K-ABC1234)
+    const urlParams = window.location.search;
+
+    const frame = document.getElementById('appFrame');
+    
+    // Jeśli w adresie jest parametr, łączymy go ze skryptem Google
+    if (urlParams && urlParams.includes('k=')) {
+      // Obsługa sytuacji, gdyby URL skryptu już zawierał znak zapytania
+      const separator = GOOGLE_SCRIPT_EXEC_URL.includes('?') ? '&' : '?';
+      const cleanParams = urlParams.startsWith('?') ? urlParams.substring(1) : urlParams;
+      frame.src = GOOGLE_SCRIPT_EXEC_URL + separator + cleanParams;
+    } else {
+      frame.src = GOOGLE_SCRIPT_EXEC_URL;
+    }
   </script>
 
 </body>
