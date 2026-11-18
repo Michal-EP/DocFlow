@@ -1,6 +1,6 @@
 {
   "name": "Portal Pracownika - Dokumenty",
-  "short_name": "Dokumenty",
+  "short_name": "DocFlow",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
